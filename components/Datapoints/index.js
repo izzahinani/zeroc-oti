@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Loader from "../UI/Loader";
 import { isObject } from "../../helper";
+import TableResults from "./TableResults";
 
 const INITIAL_STATE = {
   current_page: 1,
@@ -175,7 +176,7 @@ function Datapoints() {
           <p>{ui.message.message}</p>
         </div>
       )}
-      {JSON.stringify(query)}
+      <p>QUERIES: {JSON.stringify(query)}</p>
       <h1>Datapoints</h1>
       <form onSubmit={handleSubmit}>
         <h2>====================MULTI SELECT DROPDOWN====================</h2>
@@ -239,17 +240,7 @@ function Datapoints() {
           <p>Total Results: {state["total_results"]}</p>
         </div>
         <h2>====================RENDERED RESULTS====================</h2>
-        <div>
-          {state.results.length === 0 ? (
-            <div>NO RESULTS</div>
-          ) : (
-            state.results.map((result, index) => (
-              <div key={index} style={{ border: "1px solid black", marginTop: "50px" }}>
-                {JSON.stringify(result)}
-              </div>
-            ))
-          )}
-        </div>
+        <div>{state.results.length === 0 ? <div> NO RESULTS</div> : <TableResults results={state.results || []} />}</div>
       </div>
     </>
   );
