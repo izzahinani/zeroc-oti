@@ -18,7 +18,6 @@ export default async function handler(req, res) {
     try {
       const { body } = req.body; //{"category":[],"region":[],"sector":[],"source":[],"unit_type":[],"year":[],"query":"meep","page":"1"}
       // https://beta3.api.climatiq.io/search?query=light+duty+trucks&year=2021
-
       const parsedBody = JSON.parse(body);
       const queryArray = Object.keys(parsedBody).reduce((prevArray, currCategory) => {
         if (parsedBody[currCategory].length === 0) {

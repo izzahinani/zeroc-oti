@@ -44,7 +44,7 @@ function TableResults({ results }) {
 
   return (
     <>
-      <p>==================== RENDERED RESULT TABLE==========================</p>
+      <h2>==================== RENDERED RESULTS==========================</h2>
       <form onSubmit={handleConfirmSubmit}>
         <table>
           {/* // =========================TABLE HEAD ===================== // */}
@@ -78,7 +78,8 @@ function TableResults({ results }) {
         </table>
         <button type="submit">Confirm</button>
       </form>
-      <p>==================== RENDERED CONFIRMED TABLE==========================</p>
+      <h2>==================== RENDERED CONFIRMED TABLE==========================</h2>
+
       {Object.keys(confirmedResults).length === 0 ? (
         <div>No confirmed table</div>
       ) : (

@@ -54,7 +54,7 @@ const INITIAL_QUERY_STATE = {
   unit_type: [],
   year: [],
   query: "", //user can append + to search, need to slice
-  // page: "1",
+  page: "1",
 };
 
 function Datapoints() {
@@ -126,6 +126,7 @@ function Datapoints() {
   const submitQuery = async () => {
     try {
       setUi((prev) => ({ ...prev, isLoading: true }));
+      console.log("query", query);
       const { data } = await axios.post("/api/climatiq/orgadmin/getSearch", {
         body: JSON.stringify(query),
       });
@@ -147,16 +148,16 @@ function Datapoints() {
 
   // ==========================================================//
   const handlePagination = (type) => {
-    if (type === "prev" && state.current_page !== 1) {
+    if (type === "prev" && +state.current_page !== 1) {
       setQuery((prev) => ({
         ...prev,
-        page: +prev.page - 1,
+        page: (+state.current_page - 1).toString(),
       }));
       submitQuery();
-    } else if (type === "next" && state.current_page + 1 !== state.last_page) {
+    } else if (type === "next" && +state.current_page + 1 !== state.last_page) {
       setQuery((prev) => ({
         ...prev,
-        page: +prev.page + 1,
+        page: (+state.current_page + 1).toString(),
       }));
       submitQuery();
     }
@@ -229,19 +230,20 @@ function Datapoints() {
           <input type="text" placeholder="search..." style={{ width: "80%" }} value={query.query} name="query" onChange={handleChange} />
           <button type="submit">Search</button>
         </div>
-      </form>
-      <div>
-        <h2>====================PAGINATION RESULTS====================</h2>
+        <h2>====================PAGINATION====================</h2>
         <div>
-          <button onClick={() => handlePagination("prev")}>Prev</button>
+          <button type="button" onClick={() => handlePagination("prev")}>
+            Prev
+          </button>
           <p>Current: {state["current_page"]}</p>
-          <button onClick={() => handlePagination("next")}>Next</button>
+          <button type="button" onClick={() => handlePagination("next")}>
+            Next
+          </button>
           <p>Last Page: {state["last_page"]}</p>
           <p>Total Results: {state["total_results"]}</p>
         </div>
-        <h2>====================RENDERED RESULTS====================</h2>
-        <div>{state.results.length === 0 ? <div> NO RESULTS</div> : <TableResults results={state.results || []} />}</div>
-      </div>
+      </form>
+      <div>{state.results.length === 0 ? <div> NO RESULTS</div> : <TableResults results={state.results} />}</div>
     </>
   );
 }
