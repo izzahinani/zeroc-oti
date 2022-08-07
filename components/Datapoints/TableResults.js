@@ -1,22 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const TABLE_HEADERS = ["name", "source", "year", "scope", "unit_type", "sector", "category", "checkbox"];
 
 function TableResults({ results }) {
   const [checkedResults, setCheckedResults] = useState({}); //{uuid: {...}, {uuid2: {...}, }}
   const [confirmedResults, setConfirmedResults] = useState({});
-
   // ========================= RENDERED TABLE FN =================================//
   const handleCheck = (result) => {
-    console.log("result", result);
-    setCheckedResults((prev) => {
-      const found = Object.keys(checkedResults).find((key) => key === result.uuid);
-      if (found) {
+    const { uuid } = result;
+    setCheckedResults(({ [uuid]: value, ...others }) => {
+      if (value) {
         //to uncheck
-        return delete prev[result.uuid];
+        return others;
       } else {
         //to check
-        return { ...prev, [result.uuid]: { ...result } };
+        return { ...others, [uuid]: result };
       }
     });
   };
@@ -24,7 +22,6 @@ function TableResults({ results }) {
   const handleConfirmSubmit = (e) => {
     e.preventDefault();
     setConfirmedResults((prev) => ({ ...prev, ...checkedResults }));
-    //....
   };
 
   // ========================= CONFIRMED TABLE FN =================================//
@@ -34,21 +31,20 @@ function TableResults({ results }) {
   };
 
   const handleRemove = (uuid) => {
-    console.log("uuid", uuid);
-    const test = delete confirmedResults[uuid];
-    console.log("test", test);
-
-    setConfirmedResults((prev) => delete prev[uuid]);
-    setCheckedResults((prev) => delete prev[uuid]);
+    setConfirmedResults(({ [uuid]: value, ...others }) => {
+      return others;
+    });
+    setCheckedResults(({ [uuid]: value, ...others }) => {
+      return others;
+    });
   };
-
-  // ==============================================ISCHECKED========================================//
-  const isChecked = (incomingUUID) => Object.keys(checkedResults).find((eachKey) => eachKey === incomingUUID);
+  // ==============================================ISCHECKED & isDisabled========================================//
+  const isChecked = (uuid) => Object.keys(checkedResults).some((eachKey) => eachKey === uuid);
+  const isDisabled = (uuid) => Object.keys(confirmedResults).some((eachKey) => eachKey === uuid);
 
   return (
     <>
-      <p>==================== RENDERED TABLE==========================</p>
-      {JSON.stringify(checkedResults)}
+      <p>==================== RENDERED RESULT TABLE==========================</p>
       <form onSubmit={handleConfirmSubmit}>
         <table>
           {/* // =========================TABLE HEAD ===================== // */}
@@ -73,7 +69,7 @@ function TableResults({ results }) {
                   <td>{sector}</td>
                   <td>{category}</td>
                   <td>
-                    <input type="checkbox" defaultChecked={isChecked(uuid)} onChange={() => handleCheck(result)} />
+                    <input type="checkbox" checked={isChecked(uuid)} onChange={() => handleCheck(result)} disabled={isDisabled(uuid)} />
                   </td>
                 </tr>
               );
@@ -82,8 +78,7 @@ function TableResults({ results }) {
         </table>
         <button type="submit">Confirm</button>
       </form>
-      <p>==================== CONFIRMED TABLE==========================</p>
-      {JSON.stringify(confirmedResults)}
+      <p>==================== RENDERED CONFIRMED TABLE==========================</p>
       {Object.keys(confirmedResults).length === 0 ? (
         <div>No confirmed table</div>
       ) : (
