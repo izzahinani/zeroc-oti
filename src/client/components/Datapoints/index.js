@@ -62,6 +62,7 @@ function Datapoints() {
   const [checkedResults, setCheckedResults] = useState({}); //{uuid: {...}, {uuid2: {...}, }}
   const [confirmedResults, setConfirmedResults] = useState({});
   const [query, setQuery] = useState(INITIAL_QUERY_STATE);
+  const [firstRender, setFirstRender] = useState(true);
 
   const [ui, setUi] = useState({
     isLoading: false,
@@ -73,6 +74,9 @@ function Datapoints() {
 
   // =========================(A) FETCH API ON FIRST LOAD=================================//
   useEffect(() => {
+    if (!firstRender) {
+      return;
+    }
     (async () => {
       try {
         setUi((prev) => ({ ...prev, isLoading: true }));
@@ -120,6 +124,10 @@ function Datapoints() {
 
   // =========================USEEFFECT: if detects query, change, call getQueryAPI=================================//
   useEffect(() => {
+    if (firstRender) {
+      setFirstRender(false);
+      return;
+    }
     const timerPointer = setTimeout(() => getQueryAPI(), [1000]);
     () => clearTimeout(timerPointer);
   }, [query, getQueryAPI]);

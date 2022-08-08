@@ -2,21 +2,38 @@
   "name": "zeroc-oti",
   "version": "0.1.0",
   "private": true,
+  "main": "dist/server/index.js",
+  "engines": {
+    "node": "16"
+  },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev:client": "next src/client",
+    "dev:server": "babel src/server --out-dir dist/server --source-maps --watch",
+    "dev": "npm run dev:client & npm run dev:server",
+    "build:client": "next build src/client",
+    "build:server": "babel src/server --out-dir dist/server --source-maps",
+    "build": "npm run build:client && npm run build:server",
+    "preserve": "npm run build",
+    "serve": "cross-env NODE_ENV=production firebase serve --only functions,hosting",
+    "predeploy": "rimraf dist/ && npm run build",
+    "deploy": "cross-env NODE_ENV=production firebase deploy --only functions,hosting"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.3",
     "axios": "^0.27.2",
+    "firebase-admin": "^11.0.1",
+    "firebase-functions": "^3.22.0",
     "next": "12.2.4",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.18.10",
+    "@babel/core": "^7.18.10",
+    "@babel/preset-env": "^7.18.10",
+    "cross-env": "^7.0.3",
     "eslint": "8.21.0",
-    "eslint-config-next": "12.2.4"
+    "eslint-config-next": "12.2.4",
+    "rimraf": "^3.0.2"
   }
 }

@@ -1,0 +1,10 @@
+{
+  "/_app": "pages/_app.js",
+  "/api/climatiq/orgadmin/__getAllDropdowns": "pages/api/climatiq/orgadmin/__getAllDropdowns.js",
+  "/api/climatiq/orgadmin/getSearch": "pages/api/climatiq/orgadmin/getSearch.js",
+  "/orgadmin/location": "pages/orgadmin/location.html",
+  "/": "pages/index.html",
+  "/_error": "pages/_error.js",
+  "/_document": "pages/_document.js",
+  "/404": "pages/404.html"
+}

@@ -11,6 +11,7 @@ function MyApp({ Component, pageProps }) {
         minHeight: "100vh",
         maxWidth: "100vw",
         overflowX: "hidden",
+        zoom: "50%",
       }}
     >
       <Component {...pageProps} />
