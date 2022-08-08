@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 
 const TABLE_HEADERS = ["name", "source", "year", "scope", "unit_type", "sector", "category", "checkbox"];
 
-function TableResults({ results }) {
-  const [checkedResults, setCheckedResults] = useState({}); //{uuid: {...}, {uuid2: {...}, }}
-  const [confirmedResults, setConfirmedResults] = useState({});
+function TableResults({ results, checkedResults, confirmedResults, setCheckedResults, setConfirmedResults }) {
   // ========================= RENDERED TABLE FN =================================//
   const handleCheck = (result) => {
     const { uuid } = result;
